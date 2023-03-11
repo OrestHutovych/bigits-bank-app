@@ -1,0 +1,18 @@
+POST http://localhost:8080/home
+Content-Type: application/json
+
+{
+  "name": "fwwwd",
+  "email": "java001@gmail.com",
+  "age": 18
+}
+
+###
+
+POST http://localhost:8080/account/2
+Content-Type: application/json
+
+{
+  "number": "HELLO1",
+  "balance": 21.3
+}
