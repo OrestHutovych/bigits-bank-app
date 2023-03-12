@@ -9,10 +9,13 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/account/2
+POST http://localhost:8080/account/1
 Content-Type: application/json
 
 {
-  "number": "HELLO1",
-  "balance": 21.3
+  "currency": "USD",
+  "balance": 32.1
 }
+
+###
+GET http://localhost:8080/account/1

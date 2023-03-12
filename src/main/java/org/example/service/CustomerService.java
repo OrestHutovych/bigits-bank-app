@@ -5,6 +5,8 @@ import org.example.entity.Customer;
 import org.example.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
@@ -17,5 +19,9 @@ public class CustomerService {
             customerRepository.save(customer);
         }
         return customer;
+    }
+    public List<Customer> getAll(){
+        List<Customer> all = customerRepository.findAll();
+        return all;
     }
 }

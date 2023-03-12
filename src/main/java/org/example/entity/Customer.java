@@ -28,6 +28,6 @@ public class Customer {
     @NotNull(message = "Age can't be null")
     @Min(value = 18, message = "Age should not be less then 18")
     private Integer age;
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "customer", orphanRemoval = true)
     private List<Account> accounts;
 }
