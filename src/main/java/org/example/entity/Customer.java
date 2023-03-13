@@ -24,6 +24,7 @@ public class Customer {
     @Size(min = 4, max = 20)
     private String name;
     @Size(min = 10, max = 30)
+    @Column(unique = true)
     private String email;
     @NotNull(message = "Age can't be null")
     @Min(value = 18, message = "Age should not be less then 18")

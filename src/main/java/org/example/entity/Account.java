@@ -33,4 +33,5 @@ public class Account {
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
     private Customer customer;
+
 }

@@ -9,13 +9,10 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/account/1
+POST http://localhost:8080/account/1/5f1e7f92-ab28-4c16-882b-ef6283bdeddb/deposit?amount=100.00
 Content-Type: application/json
 
-{
-  "currency": "USD",
-  "balance": 32.1
-}
+
 
 ###
 GET http://localhost:8080/account/1
