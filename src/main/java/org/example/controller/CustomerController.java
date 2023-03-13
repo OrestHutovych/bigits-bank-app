@@ -16,12 +16,12 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/customer")
 @RequiredArgsConstructor
 public class CustomerController{
     private final CustomerService customerService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody Customer customer, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             Map<String, String> map = new HashMap<>();
@@ -33,7 +33,7 @@ public class CustomerController{
         Customer orUpdate = customerService.createOrUpdate(customer);
         return new ResponseEntity<>(orUpdate, HttpStatus.CREATED);
     }
-    @PutMapping("/{customer_id}")
+    @PutMapping("/{customer_id}/update")
     public ResponseEntity<?> update(@PathVariable Long customer_id, @Valid @RequestBody Customer customer,BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             Map<String, String> map = new HashMap<>();
@@ -55,12 +55,12 @@ public class CustomerController{
         Customer one = customerService.getOne(customer_id);
         return new ResponseEntity<>(one, HttpStatus.OK);
     }
-    @DeleteMapping("/{customer_id}")
+    @DeleteMapping("/{customer_id}/delete")
     public ResponseEntity<?> delete(@PathVariable Long customer_id){
         boolean delete = customerService.delete(customer_id);
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }
-    @DeleteMapping
+    @DeleteMapping("/delete_all")
     public ResponseEntity<?> deleteAll(){
         boolean all = customerService.deleteAll();
         return new ResponseEntity<>(all, HttpStatus.OK);
