@@ -11,6 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+import static org.example.entity.enums.Currency.USD;
+
 @Data
 @Entity
 @NoArgsConstructor @AllArgsConstructor

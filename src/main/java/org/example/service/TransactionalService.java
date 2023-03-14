@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.Account;
 import org.example.entity.Customer;
+import org.example.entity.enums.Currency;
 import org.example.exception.AccountException;
 import org.example.repository.AccountRepository;
 import org.example.repository.CustomerRepository;
@@ -16,7 +17,9 @@ import java.util.Optional;
 public class TransactionalService {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final ConvertCurrencyService convertCurrencyService;
 
+    private static final Integer MAX_VALUE_FOR_TRANSACTION = 40000;
     @Transactional
     public Account deposit(Long customer_id, String number, Double amount){
         Optional<Customer> byId = customerRepository.findById(customer_id);
@@ -59,11 +62,15 @@ public class TransactionalService {
                 if (byNumber1 != null && byNumber1.getBalance() > amount) {
                     Account byNumber2 = accountRepository.findByNumber(number2);
                     if(byNumber2 != null) {
-                        byNumber1.setBalance(byNumber1.getBalance() - amount);
-                        byNumber2.setBalance(byNumber2.getBalance() + amount);
-                        accountRepository.save(byNumber1);
-                        accountRepository.save(byNumber2);
-                        return byNumber1;
+                        if(amount <= MAX_VALUE_FOR_TRANSACTION) {
+                            byNumber1.setBalance(byNumber1.getBalance() - amount);
+                            byNumber2.setBalance(byNumber2.getBalance() + convertCurrencyService.convertCurrency(amount, byNumber1.getCurrency(), byNumber2.getCurrency()));
+                            accountRepository.save(byNumber1);
+                            accountRepository.save(byNumber2);
+                            return byNumber1;
+                        }else {
+                            throw new AccountException("You cant transfer than 40.000$");
+                        }
                     }
                 }else if(byNumber1 != null && byNumber1.getBalance() < amount){
                     throw new AccountException("Your balance below than amount");
