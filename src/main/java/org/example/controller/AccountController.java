@@ -2,6 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.Account;
+import org.example.entity.Transaction;
 import org.example.service.AccountService;
 import org.example.service.TransactionalService;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/account")
@@ -41,23 +43,6 @@ public class AccountController {
         }
         Account orUpdate = accountService.createAccountOrUpdate(customer_id, account);
         return new ResponseEntity<>(orUpdate, HttpStatus.CREATED);
-    }
-    @PostMapping("/{customer_id}/{number}/deposit")
-    public ResponseEntity<?> deposit(@PathVariable Long customer_id, @PathVariable String number, @RequestParam Double amount){
-        Account depositAmount = transactionalService.deposit(customer_id, number, amount);
-        return new ResponseEntity<>(depositAmount, HttpStatus.OK);
-    }
-    @PostMapping("/{customer_id}/{number}/withdraw")
-    public ResponseEntity<?> withdraw(@PathVariable Long customer_id, @PathVariable String number, @RequestParam Double amount){
-        Account depositAmount = transactionalService.withdraw(customer_id, number, amount);
-        return new ResponseEntity<>(depositAmount, HttpStatus.OK);
-    }
-    @PostMapping("/{customer_id1}/{customer_id2}/{number1}/{number2}/transfer")
-    public ResponseEntity<?> transfer(@PathVariable Long customer_id1, @PathVariable Long customer_id2,
-                                      @PathVariable String number1, @PathVariable String number2,
-                                      @RequestParam Double amount){
-        Account transferAccount = transactionalService.transfer(customer_id1, customer_id2, number1, number2, amount);
-        return new ResponseEntity<>(transferAccount, HttpStatus.OK);
     }
 
     @DeleteMapping("/{customer_id}/{account_id}")

@@ -3,9 +3,11 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.Account;
 import org.example.entity.Customer;
+import org.example.entity.enums.Currency;
 import org.example.exception.AccountException;
 import org.example.repository.AccountRepository;
 import org.example.repository.CustomerRepository;
+import org.example.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final static double BASIC_BALANCE = 0;
     public List<Account> getAllAccount(Long customer_id){
         Optional<Customer> customer = customerRepository.findById(customer_id);
         if(customer.isPresent()){
@@ -40,6 +43,10 @@ public class AccountService {
         Optional<Customer> byId = customerRepository.findById(customer_id);
         if(byId.isPresent()){
             account.setCustomer(byId.get());
+            if(account.getCurrency() == Currency.UAH || account.getCurrency() == Currency.EUR || account.getCurrency() == Currency.USD) {
+                account.setBalance(BASIC_BALANCE);
+            }
+            account.setNumber(StringUtil.getRandomNumberAsString(16));
             accountRepository.save(account);
             return account;
         }

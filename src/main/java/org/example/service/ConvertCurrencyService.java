@@ -1,10 +1,11 @@
 package org.example.service;
 
 import org.example.entity.enums.Currency;
+import org.example.repository.CurrencyConvert;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConvertCurrencyService implements CurrencyConvert{
+public class ConvertCurrencyService implements CurrencyConvert {
     private static final double USD_TO_UAH_RATE = 38.2;
     private static final double UAH_TO_USD_RATE = 0.03;
     private static final double USD_TO_EUR_RATE = 0.93;

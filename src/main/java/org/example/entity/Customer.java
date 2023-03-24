@@ -31,4 +31,7 @@ public class Customer {
     private Integer age;
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "customer", orphanRemoval = true)
     private List<Account> accounts;
+    @OneToMany(mappedBy = "customer")
+    private List<CreditCard> creditCards;
+
 }
