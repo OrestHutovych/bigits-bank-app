@@ -2,53 +2,36 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.Account;
-import org.example.entity.Transaction;
-import org.example.service.AccountService;
-import org.example.service.TransactionalService;
+import org.example.service.impl.AccountServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
-    private final AccountService accountService;
-    private final TransactionalService transactionalService;
-    @GetMapping("/{customer_id}")
-    public ResponseEntity<?> findAll(@PathVariable Long customer_id){
-        return new ResponseEntity<>(accountService.getAllAccount(customer_id), HttpStatus.CREATED);
+    private final AccountServiceImpl accountServiceImpl;
+    @GetMapping("/find_all/{customer_id}")
+    public ResponseEntity<?> getAllAccountByCustomer(@Valid @NotNull @PathVariable final Long customer_id){
+        return new ResponseEntity<>(accountServiceImpl.getAllAccountByCustomer(customer_id), HttpStatus.CREATED);
     }
-    @GetMapping("/{customer_id}/{account_id}")
-    public ResponseEntity<?> getOne(@PathVariable Long customer_id, @PathVariable Long account_id){
-        return new ResponseEntity<>(accountService.getOne(customer_id, account_id), HttpStatus.CREATED);
+    @GetMapping("/find_by_number/{customer_number}")
+    public ResponseEntity<?> getAccount(@Valid @NotNull @PathVariable final String customer_number){
+        return new ResponseEntity<>(accountServiceImpl.getAccount(customer_number), HttpStatus.CREATED);
     }
-
-    @PostMapping("/{customer_id}")
-    public ResponseEntity<?> create(@PathVariable Long customer_id, @Valid @RequestBody Account account, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            Map<String, String> map = new HashMap<>();
-            for(FieldError fieldError : bindingResult.getFieldErrors()){
-                map.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
-        }
-        Account orUpdate = accountService.createAccountOrUpdate(customer_id, account);
+    @PostMapping("/create_account/{customer_id}")
+    public ResponseEntity<?> createAccount(@Valid @NotNull @PathVariable final Long customer_id, @Valid @RequestBody final Account account){
+        var orUpdate = accountServiceImpl.createAccount(customer_id, account);
         return new ResponseEntity<>(orUpdate, HttpStatus.CREATED);
     }
-
-    @DeleteMapping("/{customer_id}/{account_id}")
-    public ResponseEntity<?> delete(@PathVariable Long customer_id, @PathVariable Long account_id){
-        boolean delete = accountService.delete(customer_id, account_id);
-        return new ResponseEntity<>(delete, HttpStatus.OK);
+    @DeleteMapping("/delete_account/{customer_number}")
+    public ResponseEntity<?> deleteAccount(@Valid @NotNull @PathVariable final String customer_number){
+        var account = accountServiceImpl.deleteAccount(customer_number);
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
 }

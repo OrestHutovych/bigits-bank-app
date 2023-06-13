@@ -2,7 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.Customer;
-import org.example.service.CustomerService;
+import org.example.service.impl.CustomerServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,13 +13,12 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")
 @RequiredArgsConstructor
 public class CustomerController{
-    private final CustomerService customerService;
+    private final CustomerServiceImpl customerServiceImpl;
 
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody Customer customer, BindingResult bindingResult){
@@ -30,7 +29,7 @@ public class CustomerController{
             }
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
-        Customer orUpdate = customerService.createOrUpdate(customer);
+        Customer orUpdate = customerServiceImpl.createOrUpdate(customer);
         return new ResponseEntity<>(orUpdate, HttpStatus.CREATED);
     }
     @PutMapping("/{customer_id}/update")
@@ -43,26 +42,26 @@ public class CustomerController{
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
         customer.setId(customer_id);
-        Customer update = customerService.createOrUpdate(customer);
+        Customer update = customerServiceImpl.createOrUpdate(customer);
         return new ResponseEntity<Customer>(update, HttpStatus.CREATED);
     }
     @GetMapping
     public List<Customer> findAll(){
-        return customerService.getAll();
+        return customerServiceImpl.getAll();
     }
     @GetMapping("/{customer_id}")
     public ResponseEntity<?> getOne(@PathVariable Long customer_id){
-        Customer one = customerService.getOne(customer_id);
+        Customer one = customerServiceImpl.getOne(customer_id);
         return new ResponseEntity<>(one, HttpStatus.OK);
     }
     @DeleteMapping("/{customer_id}/delete")
     public ResponseEntity<?> delete(@PathVariable Long customer_id){
-        boolean delete = customerService.delete(customer_id);
+        boolean delete = customerServiceImpl.delete(customer_id);
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }
     @DeleteMapping("/delete_all")
     public ResponseEntity<?> deleteAll(){
-        boolean all = customerService.deleteAll();
+        boolean all = customerServiceImpl.deleteAll();
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 }

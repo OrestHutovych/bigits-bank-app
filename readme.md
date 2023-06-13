@@ -16,3 +16,17 @@ http://localhost:8080/customer/{customer_id}/delete [DELETE] - Delete customer
 http://localhost:8080/customer/{customer_id}/update [PUT] - Update customer
 http://localhost:8080/customer/delete_all [DELETE] - Delete all customer
 
+I added new credit card system where:
+-
+
+- Credit card have limit for UAH 50000
+- Credit card have limit for USD 1350
+- Credit card have limit for EUR 1215
+- If your credit card has less than the limit, then create an expiration date by which the loan must be repaid or it will increase by 1%
+
+
+http://localhost:8080/credit_card/create [POST] - Create credit card
+http://localhost:8080/credit_card/{customer_id} [GET] - Find all credit card by customer
+http://localhost:8080/credit_card/{customer_id}/{credit_card_id}/{creditNumber}/deposit_to_credit [POST] - Deposit to credit card
+http://localhost:8080/credit_card/{customer_id}/{credit_card_id}/{creditNumber}/withdraw_from_credit [POST] - Withdraw from credit card
+http://localhost:8080/credit_card/{customer_id}/{credit_card_id}/{creditNumber}/withdraw_from_credit [POST] - Transfer money from credit card

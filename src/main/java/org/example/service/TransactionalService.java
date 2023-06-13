@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.common.ApplicationConstants;
 import org.example.entity.Account;
 import org.example.entity.Customer;
 import org.example.entity.Transaction;
@@ -13,7 +14,6 @@ import org.example.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -26,12 +26,6 @@ public class TransactionalService {
     private final CustomerRepository customerRepository;
     private final ConvertCurrencyService convertCurrencyService;
 
-    private static final double MAX_VALUE_FOR_TRANSACTION = 1500; // $
-    private static final double MAX_VALUE_FOR_TRANSACTION_BY_DAY = 10000; // $
-    private static final double MAX_VALUE_FOR_TRANSACTION_BY_MONTH = 25000; // $
-
-    private static final double COURSE_FOR_UAH = 38.2;
-    private static final double COURSE_FOR_EUR = 1.05;
     @Transactional
     public Account deposit(Long customer_id, Long account_id, Transaction transaction, String number){
         Optional<Customer> byId = customerRepository.findById(customer_id);
@@ -115,13 +109,13 @@ public class TransactionalService {
                         }else {
                             throw new AccountException("Account not found");
                         }
-                        if(transaction.getAmount() < (MAX_VALUE_FOR_TRANSACTION * COURSE_FOR_UAH) && byNumber1.getCurrency() == Currency.UAH) {
+                        if(transaction.getAmount() < (ApplicationConstants.Transaction.MAX_VALUE_FOR_TRANSACTION * ApplicationConstants.Transaction.COURSE_FOR_UAH) && byNumber1.getCurrency() == Currency.UAH) {
                             byNumber1.setBalance(byNumber1.getBalance() - transaction.getAmount());
                             byNumber2.setBalance(byNumber2.getBalance() + convertCurrencyService.convertCurrency(transaction.getAmount(), byNumber1.getCurrency(), byNumber2.getCurrency()));
-                        }else if(transaction.getAmount() < (MAX_VALUE_FOR_TRANSACTION * COURSE_FOR_EUR) && byNumber1.getCurrency() == Currency.EUR) {
+                        }else if(transaction.getAmount() < (ApplicationConstants.Transaction.MAX_VALUE_FOR_TRANSACTION * ApplicationConstants.Transaction.COURSE_FOR_EUR) && byNumber1.getCurrency() == Currency.EUR) {
                             byNumber1.setBalance(byNumber1.getBalance() - transaction.getAmount());
                             byNumber2.setBalance(byNumber2.getBalance() + convertCurrencyService.convertCurrency(transaction.getAmount(), byNumber1.getCurrency(), byNumber2.getCurrency()));
-                        }else if(transaction.getAmount() < (MAX_VALUE_FOR_TRANSACTION) && byNumber1.getCurrency() == Currency.USD) {
+                        }else if(transaction.getAmount() < (ApplicationConstants.Transaction.MAX_VALUE_FOR_TRANSACTION) && byNumber1.getCurrency() == Currency.USD) {
                             byNumber1.setBalance(byNumber1.getBalance() - transaction.getAmount());
                             byNumber2.setBalance(byNumber2.getBalance() + convertCurrencyService.convertCurrency(transaction.getAmount(), byNumber1.getCurrency(), byNumber2.getCurrency()));
                         }else {
