@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.entity.enums.ActivityType;
+import org.example.entity.enums.Currency;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
@@ -26,6 +26,8 @@ public class Transaction {
     private Date transactionalDate;
     @Enumerated(EnumType.STRING)
     private ActivityType activityType;
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", nullable = false)
     @JsonIgnore

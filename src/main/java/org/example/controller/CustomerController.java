@@ -29,7 +29,7 @@ public class CustomerController{
             }
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
-        Customer orUpdate = customerServiceImpl.createOrUpdate(customer);
+        Customer orUpdate = customerServiceImpl.createCustomer(customer);
         return new ResponseEntity<>(orUpdate, HttpStatus.CREATED);
     }
     @PutMapping("/{customer_id}/update")
@@ -42,7 +42,7 @@ public class CustomerController{
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
         customer.setId(customer_id);
-        Customer update = customerServiceImpl.createOrUpdate(customer);
+        Customer update = customerServiceImpl.createCustomer(customer);
         return new ResponseEntity<Customer>(update, HttpStatus.CREATED);
     }
     @GetMapping
